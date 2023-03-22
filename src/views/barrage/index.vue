@@ -1,5 +1,9 @@
 <template>
-  <barrage :list="barrageList" :user-info="userInfo" />
+  <barrage
+    :list="barrageList"
+    :user-info="userInfo"
+    :is-activated="isActivated"
+  />
   <button @click="addHandle">add</button>
 </template>
 
@@ -28,6 +32,16 @@ const addHandle = () => {
     img: '',
   });
 };
+
+const isActivated = ref(true);
+// 当前变得可见或被隐藏时
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    isActivated.value = false;
+  } else {
+    isActivated.value = true;
+  }
+});
 </script>
 
 <style lang="scss" scoped>

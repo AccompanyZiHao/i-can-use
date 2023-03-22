@@ -27,19 +27,21 @@ import { inject, Ref, ref, watch, reactive, onUnmounted } from 'vue';
 import { arrSplitChunk2 } from '@/utils/arrSplit';
 
 export type praysWallType = {
-  img: string;
-  content: string;
-  userId?: number | string;
+  img: string; // 用户头像
+  content: string; // 用户输入的弹幕信息
+  userId?: number | string; // 用户 id
 };
 
 type barragePropsType = {
-  list: praysWallType[];
-  userInfo: praysWallType;
-  highlightYourself?: boolean;
+  list: praysWallType[]; // 弹幕列表
+  userInfo: praysWallType; // 当前用户信息
+  isActivated: boolean; // 组件是否激活
+  highlightYourself?: boolean; // 是否高亮显示自己的弹幕
 };
 
 const props = defineProps<barragePropsType>();
 
+// 弹幕轨道样式
 const setWallItemClass = (i) => {
   // track.value++;
   // const i = Math.floor(Math.random() * 5);
@@ -53,8 +55,10 @@ const setWallItemClass = (i) => {
   // [track.value % 5]
 };
 
+// 要显示的弹幕数组
 const praysWallList = ref([]);
 
+// 轨道队列
 let trackQueue = reactive({
   0: null,
   1: null,
@@ -62,9 +66,12 @@ let trackQueue = reactive({
   3: null,
   4: null,
 });
-// let addPray = ref(null);
+
+// 新增弹幕
 let addPray = null;
+// 是否终止弹幕
 let isStop = false;
+// 终止时的缓存数据列表
 let cacheList = [];
 const setPraysWallList = (delay = 1000, list = [], trackIndex: number) => {
   if (isStop) {
@@ -94,6 +101,7 @@ const setPraysWallList = (delay = 1000, list = [], trackIndex: number) => {
 
     // const w = cur?.content ? getSize(cur.content) * 0.12 : 2;
     let classNameList = [setWallItemClass(trackIndex)];
+    // 英文的为 20 个字符，阿语的为34个字符
     if (cur.content.length > (/[a-zA-Z]/.test(cur.content) ? 20 : 34)) {
       delay = Number(((4.25 + 0.17) / 15).toFixed(3)) * 10000;
       classNameList.push(cur.isOwn ? 'wall-item-own2' : 'wall-item2');
@@ -134,7 +142,7 @@ const start = (arr) => {
     }
   });
 };
-// watchEffect 死循环
+// watchEffect 死循环 因为 setPraysWallList 中 list.shift()，改变了原数组
 let isFirst = true;
 watch(
   () => props.list,
@@ -144,6 +152,7 @@ watch(
         isFirst = false;
         start(value);
       } else {
+        // 数据发生改变，一定是用户新增的
         addPray = value[value.length - 1];
       }
     }
@@ -154,6 +163,7 @@ watch(
   }
 );
 
+// 清除队列
 const clearTrackQueue = () => {
   isStop = true;
   clearTimeout(trackQueue[0]);
@@ -169,19 +179,19 @@ const clearTrackQueue = () => {
   praysWallList.value = [];
 };
 
-// const isActivated = inject<Ref<boolean>>('isActivated');
-// watch(
-//   () => isActivated.value,
-//   (val) => {
-//     if (val === true) {
-//       isStop = false;
-//       start(props.list);
-//     } else if (val === false) {
-//       isStop = true;
-//       clearTrackQueue();
-//     }
-//   }
-// );
+// 组件是否被激活，
+watch(
+  () => props.isActivated,
+  (val) => {
+    if (val === true) {
+      isStop = false;
+      start(props.list);
+    } else if (val === false) {
+      isStop = true;
+      clearTrackQueue();
+    }
+  }
+);
 
 //  const showList = computed(()=>{
 //   if(!isStop){

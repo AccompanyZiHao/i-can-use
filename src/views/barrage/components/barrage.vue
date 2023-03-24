@@ -133,9 +133,9 @@ const setPraysWallList = (delay = 1000, list = [], trackIndex: number) => {
 };
 const start = (arr) => {
   const list = arrSplitChunk2(arr, 5);
-  // if (praysWallList.value.length >= 2 * props.list.length) {
-  //   praysWallList.value.splice(0, props.list.length);
-  // }
+  if (praysWallList.value.length >= 2 * props.list.length) {
+    praysWallList.value.splice(0, props.list.length);
+  }
   list.forEach((item, index) => {
     if (!trackQueue[index]) {
       setPraysWallList(index * 200, [...item], index);

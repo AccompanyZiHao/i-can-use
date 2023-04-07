@@ -15,7 +15,9 @@ export default {
 
 ### rem
 
-移动端适配
+1. 移动端适配: `setRem`
+2. 获取当前页面 `document` 的 `font-size`: `getFontSize`
+3. 判断是否是移动端 `isMobile`
 
 ### arrSplit
 
@@ -25,3 +27,5 @@ export default {
 2. 分为 `size` 组
 
 ### getSize 获取字符串的字节数
+
+### useFullScreen 使用全屏显示

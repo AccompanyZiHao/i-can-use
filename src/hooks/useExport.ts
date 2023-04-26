@@ -1,4 +1,5 @@
-import { ElMessageBox } from 'element-plus';
+// @ts-ignore
+import { ElMessageBox } from 'element-plus'
 import { http } from '@/utils/http';
 import { unref } from 'vue';
 import { AxiosResponse } from 'axios';
@@ -6,11 +7,12 @@ import { formParams, dateFormat } from '@/utils/formatParams';
 
 function onExport(url: string, params: any) {
   params = unref(params);
-  http.get<AxiosResponse>(url, { params: formParams(params) }).then((resp) => {
-    let filename = resp.headers['content-disposition']
+  http.get(url, { params: formParams(params) }).then((resp) => {
+    const {headers} = resp as any
+    let filename = headers['content-disposition']
       ?.split(';')[1]
       ?.replace('filename=', '');
-    let blob = new Blob([resp.data], { type: 'text/csv' }); // 指定文件MIME
+    let blob = new Blob([resp?.data], { type: 'text/csv' }); // 指定文件MIME
     let a = document.createElement('a');
     a.download = filename || dateFormat(+new Date(), 2).replace(/-|_| /g, ''); // 指定下载的文件名
     a.href = URL.createObjectURL(blob); // URL对象

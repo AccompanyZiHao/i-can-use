@@ -35,8 +35,11 @@
     "unplugin-auto-import": "^0.15.3",
     "unplugin-vue-components": "^0.24.1",
     "vite": "^4.2.0",
+    "vite-plugin-cdn-import": "^0.3.5",
+    "vite-plugin-chunk-split": "^0.4.7",
     "vite-plugin-externals": "^0.6.2",
     "vite-plugin-externals-extension": "^0.0.7",
+    "vite-plugin-imagemin": "^0.6.1",
     "vite-plugin-progress": "^0.0.6",
     "vite-plugin-vue-setup-extend": "^0.4.0",
     "vue-tsc": "^1.2.0"

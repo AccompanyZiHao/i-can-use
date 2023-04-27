@@ -24,7 +24,6 @@ const routerPage = Object.entries(modulesConfig).map(
     };
   }
 );
-
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [...routerPage],

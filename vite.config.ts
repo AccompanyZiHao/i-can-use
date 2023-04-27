@@ -1,36 +1,10 @@
 import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
 import { resolve } from 'path';
-import VueSetupExtend from 'vite-plugin-vue-setup-extend';
-import Components from 'unplugin-vue-components/vite';
-import { VantResolver } from 'unplugin-vue-components/resolvers';
-import { visualizer } from "rollup-plugin-visualizer";
-import AutoImport from 'unplugin-auto-import/vite'
-import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
-import legacy from '@vitejs/plugin-legacy'
-import externalGlobals from "rollup-plugin-external-globals";
+import { plugins } from './config/plugins';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [
-    vue(),
-    VueSetupExtend(),
-    legacy({
-      targets: ['defaults', 'not IE 11'],
-    }),
-    Components({
-      resolvers: [VantResolver(),ElementPlusResolver()],
-    }),
-    AutoImport({
-      resolvers: [ElementPlusResolver()],
-    }),
-
-    visualizer({
-      open:true,  //注意这里要设置为true，否则无效
-      gzipSize:true,
-      brotliSize:true
-    })
-  ],
+  plugins,
   resolve: {
     alias: {
       '@': resolve(__dirname, './src'),
@@ -53,23 +27,34 @@ export default defineConfig({
   // optimizeDeps: {
   //   exclude: ['Vue', 'VueRouter', 'axios', 'ElementPlus', 'ElementPlusIconsVue'],
   // },
-  build:{
+  build: {
     sourcemap: false,
 
     rollupOptions: {
-      external: [ 'Vue','VueRouter', 'axios', 'ElementPlus', 'ElementPlusIconsVue'],
-      // external: ['vue', 'axios', 'vue-router'],
-      plugins: [
-        externalGlobals({
-          vue: 'Vue',
-          axios: 'axios',
-          'vue-router': 'VueRouter',
-          ElementPlus:'ElementPlus',
-          ElementPlusIconsVue:'ElementPlusIconsVue'
-        })
-      ],
+      // external: ['Vue', 'VueRouter', 'axios', 'ElementPlus'],
+      // plugins: [
+      //   externalGlobals({
+      //     vue: 'Vue',
+      //     axios: 'axios',
+      //     'vue-router': 'VueRouter',
+      //     ElementPlus: 'ElementPlus',
+      //   })
+      // ],
       output: {
-        manualChunks: {
+        manualChunks: (id: string) => {
+          // if (id.includes('node_modules')) {
+          //   return 'vendor';
+          // }
+          // if (id.includes('src/assets/img')) {
+          //   return 'img';
+          // }
+          // if (id.includes('src/views')) {
+          //   return 'views';
+          // }
+          // if (id.includes('css')) {
+          //   return 'css';
+          // }
+          return 'common';
         },
       },
     },

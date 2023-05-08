@@ -29,3 +29,7 @@ export default {
 ### getSize 获取字符串的字节数
 
 ### useFullScreen 使用全屏显示
+
+### str 字符串方法
+
+`numToFixed` 数字保留小数位数
